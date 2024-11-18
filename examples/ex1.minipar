@@ -1,0 +1,21 @@
+a: number = 10
+b: bool = true
+# comentário simples
+/* comentario composto
+ * multilinha
+*/
+func soma(num1: number, num2: number) -> number
+{
+    if (num1 >= num2){
+      num1 = num1 + num2
+    }
+    while(a < 20){
+      a = a + 1
+      if(a == 15){break}
+    }
+
+    return 500
+}
+
+
+print(func(soma(2, 3)))

@@ -1,0 +1,7 @@
+i: string = "Ola mundo"
+b: number = 100
+print(i[2])
+
+func echo() -> void{
+  print("oi")
+}

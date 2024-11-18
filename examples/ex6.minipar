@@ -1,0 +1,16 @@
+/* exemplo de recursao */
+
+func fatorial(n: number) -> number
+{
+  if (n == 0 || n == 1)
+  {
+    return 1
+  }
+  else {
+  return n * fatorial(n - 1)
+  }
+}
+
+print("CALCULA O FATORIAL RECURSIVO")
+valor: number = to_number(input("Digite um número: "))
+print("Fatorial: ", fatorial(valor))
