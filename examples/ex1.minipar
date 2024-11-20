@@ -6,16 +6,15 @@ b: bool = true
 */
 func soma(num1: number, num2: number) -> number
 {
-    if (num1 >= num2){
-      num1 = num1 + num2
-    }
+    s: number = num1 + num2
     while(a < 20){
       a = a + 1
+      print(a)
       if(a == 15){break}
     }
 
-    return 500
+    return s + 10
 }
 
 
-print(func(soma(2, 3)))
+print(soma(2, 3))

@@ -12,5 +12,5 @@ func fatorial(n: number) -> number
 }
 
 print("CALCULA O FATORIAL RECURSIVO")
-valor: number = to_number(input("Digite um número: "))
+valor: number = 10
 print("Fatorial: ", fatorial(valor))

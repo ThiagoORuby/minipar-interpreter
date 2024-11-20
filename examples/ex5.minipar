@@ -1,7 +1,11 @@
-i: string = "Ola mundo"
-b: number = 100
-print(i[2])
+num: number = 10
 
-func echo() -> void{
-  print("oi")
+func count(n: number) -> void{
+  while(n >= 0)
+  {
+    print(n)
+    n = n - 1
+  }
 }
+
+count(num)
