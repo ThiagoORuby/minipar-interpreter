@@ -1,11 +1,18 @@
+"""
+Módulo de tokens
+
+o módulo de tokens conta com a classe Token e constantes
+necessárias para a análise léxica
+"""
+
 from dataclasses import dataclass
 
+# Padrões dos tokens
 TOKEN_PATTERNS = [
     ("NAME", r"[A-Za-z_][A-Za-z0-9_]*"),
     ("NUMBER", r"\b\d+\.\d+|\.\d+|\d+\b"),
     ("RARROW", r"->"),
-    ("RDARROW", r"=>"),
-    ("STRING", r'"([^"]*)"'),  # strings
+    ("STRING", r'"([^"]*)"'),
     ("SCOMMENT", r"#.*"),
     ("MCOMMENT", r"/\*[\s\S]*?\*/"),
     ("OR", r"\|\|"),
@@ -14,17 +21,17 @@ TOKEN_PATTERNS = [
     ("NEQ", r"!="),
     ("LTE", r"<="),
     ("GTE", r">="),
-    ("NEWLINE", r"\n"),  # Nova linha (usada para separação de regras)
-    ("WHITESPACE", r"\s+"),  # Espaços em branco
+    ("NEWLINE", r"\n"),
+    ("WHITESPACE", r"\s+"),
     ("OTHER", r"."),
 ]
 
+# Nome dos Tokens de declarações
 STATEMENT_TOKENS = {
     "ID",
     "FUNC",
     "IF",
     "ELSE",
-    "FOR",
     "WHILE",
     "RETURN",
     "BREAK",
@@ -35,6 +42,7 @@ STATEMENT_TOKENS = {
     "S_CHANNEL",
 }
 
+# Mapeamento de tipos de retorno para funções padrão da linguagem
 DEFAULT_FUNCTION_NAMES = {
     "print": "VOID",
     "input": "STRING",
@@ -49,6 +57,8 @@ DEFAULT_FUNCTION_NAMES = {
     "isnum": "BOOL",
 }
 
+
+# Regex para Análise Léxica
 TOKEN_REGEX = '|'.join(
     f'(?P<{name}>{pattern})' for name, pattern in TOKEN_PATTERNS
 )
@@ -56,6 +66,14 @@ TOKEN_REGEX = '|'.join(
 
 @dataclass
 class Token:
+    """
+    Classe que representa um Token (Lexema) da linguagem
+
+    Attributes:
+        tag (str): Tag do token
+        value (str): Valor do token
+    """
+
     tag: str
     value: str
 

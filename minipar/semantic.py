@@ -1,3 +1,11 @@
+"""
+Módulo de Análise Semântica
+
+O módulo de análise semântica possibilita uma verificação mais
+cuidadosa na AST gerada pela análise sintática, visando a identificação
+de problemas semânticos
+"""
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
@@ -5,14 +13,17 @@ from minipar import ast
 from minipar import error as err
 from minipar.token import DEFAULT_FUNCTION_NAMES
 
-# TODO:Tipo: verficação de compatibilidade de operadores (Arithmetic, Relational, Logic)
-# TODO:Funções: verificar que funções estão sendo atribuidas a variável de mesmo retorno
-# TODO:Funções: verificar se retorno da função possui mesmo tipo do declarado para retorno
-# TODO:Funções: verificar se numero de argumentos da função da sendo passado corretamente
-# TODO:Escopo: verificar se return está em função e break e continue em while/for
+# Tipo: verficação de compatibilidade de operadores (Arithmetic, Relational, Logic)
+# Funções: verificar que funções estão sendo atribuidas a variável de mesmo retorno
+# Funções: verificar se retorno da função possui mesmo tipo do declarado para retorno
+# Funções: verificar se numero de argumentos da função da sendo passado corretamente
+# Escopo: verificar se return está em função e break e continue em while/for
 
 
 class ISemanticAnalyzer(ABC):
+    """
+    Interface para a Análise Semântica
+    """
 
     @abstractmethod
     def visit(self, node: ast.Node):

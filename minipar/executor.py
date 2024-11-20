@@ -115,7 +115,7 @@ class Executor(IExecutor):
                 return self.execute(instruction)
             else:
                 ret = self.execute(instruction)
-            if ret or ret in (commands.BREAK, commands.CONTINUE):
+            if ret is not None or ret in (commands.BREAK, commands.CONTINUE):
                 return ret
 
         return None

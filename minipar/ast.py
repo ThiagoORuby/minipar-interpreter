@@ -1,19 +1,42 @@
+"""
+Módulo da Árvore Sintática Abstrata (AST)
+
+O módulo da AST conta com uma estrutura de classes responsável
+por representa o conjunto de declarações e expressões da linguagem
+"""
+
 from dataclasses import dataclass
 
 from minipar.token import Token
 
 
 class Node:
+    """
+    Classe que representa um Nó na AST
+    """
+
     pass
 
 
 @dataclass
 class Statement(Node):
+    """
+    Classe que representa uma declaração
+    """
+
     pass
 
 
 @dataclass
 class Expression(Node):
+    """
+    Classe que representa uma expressão
+
+    Attributes:
+        type (str): Tipo de retorno da expressão
+        token (Token): Token capturado pela expressão
+    """
+
     type: str
     token: Token
 
@@ -29,7 +52,7 @@ type Body = list[Statement | Expression]  # corpo dos Statements
 type Arguments = list[Expression]  # valor dos keywords
 type Parameters = dict[
     str, tuple[str, Expression | None]
-]  # key: type, default
+]  # estrutura dos parâmetros (key: type, default)
 
 ##### EXPRESSIONS #####
 
@@ -71,12 +94,6 @@ class Arithmetic(Expression):
 @dataclass
 class Unary(Expression):
     expr: Expression
-
-
-@dataclass
-class Inline(Expression):
-    params: Parameters
-    body: Expression
 
 
 @dataclass

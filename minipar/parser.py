@@ -1,3 +1,11 @@
+"""
+Módulo de Análise Sintática
+
+O módulo de Análise Sintática conta com classes que possibilitam a
+geração da Árvore Sintática Abstrada através da análise da sequência
+de tokens identificados na linguagem
+"""
+
 from abc import ABC, abstractmethod
 from copy import deepcopy
 
@@ -9,6 +17,9 @@ from minipar.token import DEFAULT_FUNCTION_NAMES, STATEMENT_TOKENS, Token
 
 
 class IParser(ABC):
+    """
+    Interface para a Análise Sintática
+    """
 
     @abstractmethod
     def match(self, tag: str) -> bool:
@@ -20,6 +31,18 @@ class IParser(ABC):
 
 
 class Parser(IParser):
+    """
+    Classe que implementa os métodos da interface de Análise Sintática
+
+    Args:
+        lexer (Lexer): Instância da classe de Análise Léxica
+
+    Attributes:
+        lexer (NextToken): Gerador de tokens
+        lookahead (Token): Token atual da análise
+        lineno (int): Linha atual da análise
+        symtable (Symtable): Tabéla de símbolos da análise
+    """
 
     def __init__(self, lexer: Lexer):
         self.lexer: NextToken = lexer.scan()
@@ -28,8 +51,17 @@ class Parser(IParser):
         for func_name in DEFAULT_FUNCTION_NAMES.keys():
             self.symtable.insert(func_name, Symbol(func_name, "FUNC"))
 
-    def match(self, tag: str):
+    def match(self, tag: str) -> bool:
+        """
+        Verifica se a tag do lookahead é igual a tag de entrada
+        e atualiza o lookahead caso haja correspondência
+
+        Args:
+            tag (str): Tag de verificação
+        """
         if tag == self.lookahead.tag:
+            # Se tag corresponde, tenta pegar o próximo token
+            # ou retorna Token de EOF
             try:
                 self.lookahead, self.lineno = next(self.lexer)
             except StopIteration:
@@ -37,7 +69,13 @@ class Parser(IParser):
             return True
         return False
 
-    def start(self):
+    def start(self) -> ast.Module:
+        """
+        Inicia a Análise Sintática e retorna a AST ao final
+
+        Returns:
+            Module: Árvore Sintática Abstrata identificada
+        """
         return self.program()
 
     def program(self):
@@ -62,7 +100,7 @@ class Parser(IParser):
         match self.lookahead.tag:
             case "ID":
                 # assignment -> local = expression
-                left: ast.Expression = self.primary()
+                left: ast.Expression = self.local()
                 if isinstance(left, ast.Call):
                     return left
                 if not self.match("="):
@@ -323,7 +361,7 @@ class Parser(IParser):
             # args -> arg next_args
             arguments.append(self.disjunction())
 
-        # next_args -> , args next_args
+        # next_args -> , arg next_args
         #           | EMPTY
         while True:
             if self.lookahead.tag == ",":
@@ -470,7 +508,8 @@ class Parser(IParser):
 
     def local(self):
         # local -> ID local_op
-        # local_op -> index local_op
+        # local_op -> : TYPE
+        #       | index local_op
         #       | . ID local_op
         #       | ( arguments )
         #       | EMPTY
@@ -479,7 +518,7 @@ class Parser(IParser):
             case "ID":
                 token = deepcopy(self.lookahead)
                 self.match("ID")
-                # declaration -> ID: TYPE = expression
+                # local_op -> : TYPE
                 if self.lookahead.value == ":":
                     self.match(":")
                     _type = self.lookahead.value
@@ -533,7 +572,7 @@ class Parser(IParser):
                         if not self.match(")"):
                             raise err.SyntaxError(
                                 self.lineno,
-                                f"esperando {{ no lugar de {self.lookahead.value}",
+                                f"esperando ( no lugar de {self.lookahead.value}",
                             )
                         break
                     else:
@@ -608,7 +647,7 @@ class Parser(IParser):
         elif s:
             raise err.SyntaxError(
                 self.lineno,
-                f"variável {token.value} do tipo {id_type.lower()} já existe",
+                f"variável {token.value} com tipo {s.type} já existe",
             )
         self.symtable.insert(token.value, Symbol(token.value, id_type))
         return token.value
